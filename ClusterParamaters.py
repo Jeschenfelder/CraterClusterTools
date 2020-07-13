@@ -41,22 +41,21 @@ if crater_no >3:
 if crater_no <=5:
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(111)
-    ax.scatter(ClusterData['x_coord'], ClusterData['y_coord'], color = '.', marker = '*') #plotting crater locations
+    ax.scatter(ClusterData['x_coord'], ClusterData['y_coord'], color = 'k', marker = '.') #plotting crater locations
     ax.set_title('Cluster of ' + HiRiseID)
     plt.show()
 else: #Still need to add ellipse plot!
     #Converting from degrees to metres
     Rmars = 3390000 #radius of Mars in metres
-    print(ClusterData['x_coord'].head())
-    ClusterData['x_coord'] = ClusterData['x_coord'].apply(lambda a:(a - latc)*Rmars*(np.pi/180)) #converting coordinates from degrees to metres
-    ClusterData['y_coord'] = ClusterData['y_coord'].apply(lambda a:(a - lonc)*Rmars*(np.pi/180)*mt.sin(mt.radians(90 - a)))
-    print(ClusterData['x_coord'].head())
-    centre , radii, rotation_matrix, rotation_angle = ct.BestFitEllipse(ClusterData, latc, lonc)
+    ClusterData_copy = ClusterData.copy() #do conversion on a copy to avoid overwriting original coordinates
+    ClusterData_copy['x_coord'] = ClusterData_copy['x_coord'].apply(lambda a:(a - latc)*Rmars*(np.pi/180)) #converting coordinates from degrees to metres
+    ClusterData_copy['y_coord'] = ClusterData_copy['y_coord'].apply(lambda a:(a - lonc)*Rmars*(np.pi/180)*mt.sin(mt.radians(90 - a)))
+    centre , radii, rotation_matrix, rotation_angle = ct.BestFitEllipse(ClusterData_copy, latc, lonc)
     ellipse = Ellipse(centre, 2*radii[0], 2*radii[1], rotation_angle, fill = False, color = 'r')
     #fig, ax = ct.plotellipse(centre, radii, rotation_matrix)
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(111)
-    ax.scatter(ClusterData['x_coord'], ClusterData['y_coord'],marker = '.', color = 'k') #plotting crater locations
+    ax.scatter(ClusterData_copy['x_coord'], ClusterData_copy['y_coord'],marker = '.', color = 'k') #plotting crater locations using the converted coordinates
     ax.add_patch(ellipse)
     ax.set_title('Cluster of ' + HiRiseID)
     plt.show()
