@@ -76,7 +76,7 @@ main.to_excel('MainSheet.xlsx') #saving the new version
 #creating parameter dictionary:
 new_cluster = {'HiRise_ID': HiRiseID, 'Number_Craters': crater_no, 'd_eff': d_effective, 'd_max': largest,
 'Number>D/2': N, 'F_value': F, 'Dispersion': disp,
-'central_latitude': latc, 'central_longitude': lonc}
+'central_latitude': latc, 'central_longitude': lonc, 'R1': radii[0], 'R2': radii[1]}
 #reading in Paramaters sheet
 df_parameters = pd.read_excel('C:/Users/jae4518/OneDrive - Imperial College London/HiRise_Images_Clusters/ClustersDataSheet/NewClustersParameters.xlsx')
 #adding the new values to the list:
