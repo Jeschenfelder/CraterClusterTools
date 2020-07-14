@@ -52,12 +52,14 @@ if crater_no <=5:
     plt.show()
 else: #Still need to add ellipse plot!
     centre , radii, rotation_matrix, rotation_angle = ct.BestFitEllipse(ClusterData_copy, latc, lonc)
-    ellipse = Ellipse(centre, 2*radii[0], 2*radii[1], rotation_angle, fill = False, color = 'r')
+    ellipse1 = Ellipse(centre, 2*radii[0], 2*radii[1], rotation_angle, fill = False, color = 'r')
+    ellipse2 = Ellipse(centre, 2*radii[1], 2*radii[0], rotation_angle, fill = False, color = 'y') #plotting both possible ellipse orientations
     #fig, ax = ct.plotellipse(centre, radii, rotation_matrix)
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(111)
     ax.scatter(ClusterData_copy['x_coord'], ClusterData_copy['y_coord'],marker = '.', color = 'k') #plotting crater locations using the converted coordinates
-    ax.add_patch(ellipse)
+    ax.add_patch(ellipse1)
+    ax.add_patch(ellipse2)
     ax.set_title('Cluster of ' + HiRiseID)
     plt.show()
 
