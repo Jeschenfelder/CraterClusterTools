@@ -50,6 +50,7 @@ if crater_no <=5:
     ax.scatter(ClusterData_copy['x_coord'], ClusterData_copy['y_coord'], color = 'k', marker = '.') #plotting crater locations
     ax.set_title('Cluster of ' + HiRiseID)
     plt.show()
+    
 else: #Still need to add ellipse plot!
     centre , radii, rotation_matrix, rotation_angle = ct.BestFitEllipse(ClusterData_copy, latc, lonc)
     ellipse1 = Ellipse(centre, 2*radii[0], 2*radii[1], rotation_angle, fill = False, color = 'r')
