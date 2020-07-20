@@ -1,4 +1,4 @@
-import CraterTools as ct
+import ClusterTools as ct
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mp
@@ -37,6 +37,9 @@ if crater_no >3:
     disp = ct.dispersion(ClusterData)
     print('dispersion: ', disp)
 
+if crater_no <=3:
+    disp = None
+
 #Converting from degrees to metres for best fit ellipse calculations and plotting:
 Rmars = 3390000 #radius of Mars in metres
 ClusterData_copy = ClusterData.copy() #do conversion on a copy to avoid overwriting original coordinates
@@ -50,12 +53,15 @@ if crater_no <=5:
     ax.scatter(ClusterData_copy['x_coord'], ClusterData_copy['y_coord'], color = 'k', marker = '.') #plotting crater locations
     ax.set_title('Cluster of ' + HiRiseID)
     plt.show()
-    
-else: #Still need to add ellipse plot!
+    #create dictionary to add to parameters sheet:
+    new_cluster = {'HiRise_ID': HiRiseID, 'Number_Craters': crater_no, 'd_eff': d_effective, 'd_max': largest,
+    'Number>D/2': N, 'F_value': F, 'Dispersion': disp,
+    'central_latitude': latc, 'central_longitude': lonc}
+
+else:
     centre , radii, rotation_matrix, rotation_angle = ct.BestFitEllipse(ClusterData_copy, latc, lonc)
     ellipse1 = Ellipse(centre, 2*radii[0], 2*radii[1], rotation_angle, fill = False, color = 'r')
     ellipse2 = Ellipse(centre, 2*radii[1], 2*radii[0], rotation_angle, fill = False, color = 'y') #plotting both possible ellipse orientations
-    #fig, ax = ct.plotellipse(centre, radii, rotation_matrix)
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(111)
     ax.scatter(ClusterData_copy['x_coord'], ClusterData_copy['y_coord'],marker = '.', color = 'k') #plotting crater locations using the converted coordinates
@@ -63,7 +69,10 @@ else: #Still need to add ellipse plot!
     ax.add_patch(ellipse2)
     ax.set_title('Cluster of ' + HiRiseID)
     plt.show()
-
+    #create dictionary to add to parameters sheet:
+    new_cluster = {'HiRise_ID': HiRiseID, 'Number_Craters': crater_no, 'd_eff': d_effective, 'd_max': largest,
+    'Number>D/2': N, 'F_value': F, 'Dispersion': disp,
+    'central_latitude': latc, 'central_longitude': lonc, 'R1': radii[0], 'R2': radii[1]}
 #Adding the new Cluster to existing Main sheet and data to data sheet:
 df_new = ClusterData.copy() #create copy to format
 #creating Multiindex and formatting to important data only
@@ -76,10 +85,7 @@ df_main = pd.read_excel('C:/Users/jae4518/OneDrive - Imperial College London/HiR
 main = pd.concat([df_main, df_new])
 main.to_excel('MainSheet.xlsx') #saving the new version
 
-#creating parameter dictionary:
-new_cluster = {'HiRise_ID': HiRiseID, 'Number_Craters': crater_no, 'd_eff': d_effective, 'd_max': largest,
-'Number>D/2': N, 'F_value': F, 'Dispersion': disp,
-'central_latitude': latc, 'central_longitude': lonc, 'R1': radii[0], 'R2': radii[1]}
+
 #reading in Paramaters sheet
 df_parameters = pd.read_excel('C:/Users/jae4518/OneDrive - Imperial College London/HiRise_Images_Clusters/ClustersDataSheet/NewClustersParameters.xlsx')
 #adding the new values to the list:
