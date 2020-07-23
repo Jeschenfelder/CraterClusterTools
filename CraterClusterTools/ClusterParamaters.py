@@ -21,7 +21,7 @@ HiRiseID = input_list[-1]
 
 #Number of craters in cluster:
 crater_no = len(ClusterData.index)
-ClusterData['Diam_m'] = ClusterData['Diam_km'].apply(lambda x: ct.round_sig(x*1000, sig=3) ) #converting diameter to meters and rounding
+ClusterData['Diam_m'] = ClusterData['Diam_km'].apply(lambda x: round(x*1000, 2) ) #converting diameter to meters and rounding
 
 #Calculating effective diameter:
 d_effective = ct.d_eff(ClusterData)
