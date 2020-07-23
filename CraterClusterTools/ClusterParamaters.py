@@ -1,4 +1,4 @@
-import CraterTools as ct
+import ClusterTools as ct
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mp
