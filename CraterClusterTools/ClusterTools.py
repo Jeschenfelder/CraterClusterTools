@@ -25,7 +25,7 @@ class ClusterTools:
         '''
         df = ClusterData.copy() #work copy of the data to not alter the original file
         df['D_cubed'] = df[diameter].apply(lambda x: x**3)
-        d_effective = round_sig((df['D_cubed'].sum())**(1/3), sig = 4) #calculating the effective diameter
+        d_effective = round((df['D_cubed'].sum())**(1/3), 3) #calculating the effective diameter
         return d_effective
 
     #Calculating F value. Ratio of craters of larger diameter than half the diameter of the largest crater in cluster_file
