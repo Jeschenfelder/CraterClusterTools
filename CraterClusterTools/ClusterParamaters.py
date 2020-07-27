@@ -75,7 +75,7 @@ ClusterData_copy['y_coord'] = ClusterData_copy['y_coord'].apply(lambda a:(a - lo
 
 #Calclulating best Fit ellipse:
 if crater_no > 5:
-    centre , radii, rotation_matrix, rotation_angle = ct.BestFitEllipse(ClusterData_copy, latc, lonc)
+    centre , radii, rotation_matrix, rotation_angle = ct.BestFitEllipse(ClusterData_copy)
 
 if args.verbose:
     #Starting the Plot:

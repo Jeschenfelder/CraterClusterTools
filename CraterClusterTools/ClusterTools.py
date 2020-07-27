@@ -73,7 +73,7 @@ class ClusterTools:
         dispersion = np.std(sep_list) #calculating dispersion as standard deviation
         return dispersion
 
-    def BestFitEllipse(self, ClusterData,latc, lonc, tolerance=0.1, lat = 'x_coord', lon = 'y_coord'):
+    def BestFitEllipse(self, ClusterData, tolerance=0.1, lat = 'x_coord', lon = 'y_coord'):
         '''
         adapted from Michael Imelfort at https://github.com/minillinim/ellipsoid/blob/master/ellipsoid.py
         This function will calculate the radii, centre point and rotation of the best fitting Ellipse around the cluster from a pandas dataframe.
