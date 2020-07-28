@@ -14,12 +14,12 @@ The program takes as input the path to the cluster's data and the lat lon coordi
 The program assumes that the cluster's data is named after the HiRise ID of the image used and will use this as a label for the data.
 '''
 
-my_parser = argparse.ArgumentParser(prog = 'ClusterParameters', description='Calculate Cluster Parameters and save data to main list and parameter sheet')
-my_parser.add_argument('Path',nargs = str, help = 'Excel Sheet of raw Cluster Data, named after the HiRiseID of image')
-my_parser.add_argument('latitude', nargs= float, help = 'central latitude of image')
-my_parser.add_argument('longitude', nargs = float, help = 'central longitude of image')
-my_parser.add_argument('-v' , '--verbose', help = 'will print the outputs and plot the cluster')
-args = my_parser.parse_args()
+parser = argparse.ArgumentParser(description='Calculate Cluster Parameters and save data to main list and parameter sheet')
+parser.add_argument('Path',type = str, help = 'Excel Sheet of raw Cluster Data, named after the HiRiseID of image')
+parser.add_argument('latitude' ,type= float, help = 'central latitude of image')
+parser.add_argument('longitude', type = float, help = 'central longitude of image')
+parser.add_argument('-v' , '--verbose', help = 'will print the outputs and plot the cluster')
+args = parser.parse_args()
 cluster_file = args.Path
 latc = args.latitude
 lonc = args.longitude
@@ -99,8 +99,8 @@ if args.verbose:
     plt.show()
 
 #the output files:
-main_list = 'C:/Users/jae4518/OneDrive - Imperial College London/HiRise_Images_Clusters/ClustersDataSheet/MainSheet.xlsx'
-parameters_list = 'C:/Users/jae4518/OneDrive - Imperial College London/HiRise_Images_Clusters/ClustersDataSheet/NewClustersParameters.xlsx'
+main_list = 'Testlist.xlsx'
+parameters_list = 'TestParameters.xlsx'
 
 #Adding the new Cluster to existing Main sheet and data to data sheet:
 df_new = ClusterData.copy() #create copy to format
@@ -112,11 +112,11 @@ df_new.set_index(['HiRiseID', 'crater_no'], inplace = True) #create the Multiind
 df_new.to_excel(HiRiseID + 'formatted.xlsx')
 df_main = pd.read_excel(main_list, index_col=[0, 1])
 main = pd.concat([df_main, df_new])
-main.to_excel('MainSheet.xlsx') #saving the new version
+main.to_excel(main_list) #saving the new version
 
 
 #reading in Paramaters sheet
 df_parameters = pd.read_excel(parameters_list)
 #adding the new values to the list:
 df_parameters = df_parameters.append(new_cluster, ignore_index = True)
-df_parameters.to_excel('C:/Users/jae4518/OneDrive - Imperial College London/HiRise_Images_Clusters/ClustersDataSheet/NewClustersParameters.xlsx') #saving the updated version
+df_parameters.to_excel(parameters_list) #saving the updated version
