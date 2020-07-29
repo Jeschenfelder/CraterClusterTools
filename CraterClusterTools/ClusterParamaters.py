@@ -14,19 +14,22 @@ The program takes as input the path to the cluster's data and the lat lon coordi
 The program assumes that the cluster's data is named after the HiRise ID of the image used and will use this as a label for the data.
 '''
 
-parser = argparse.ArgumentParser(description='Calculate Cluster Parameters and save data to main list and parameter sheet')
-parser.add_argument('Path',type = str, help = 'Excel Sheet of raw Cluster Data, named after the HiRiseID of image')
-parser.add_argument('latitude' ,type= float, help = 'central latitude of image')
-parser.add_argument('longitude', type = float, help = 'central longitude of image')
+
+parser = argparse.ArgumentParser(prog = 'ClusterParameters', description='Calculate Cluster Parameters and save data to main list and parameter sheet')
 parser.add_argument('-v' , '--verbose', help = 'will print the outputs and plot the cluster')
+parser.add_argument('-s' , '--save', help = 'will save the outputs to log files')
+parser.add_argument('Path',type = str, help = 'Excel Sheet of raw Cluster Data, named after the HiRiseID of image')
+parser.add_argument('latitude', type= float, help = 'central latitude of image')
+parser.add_argument('longitude', type = float, help = 'central longitude of image')
+
 args = parser.parse_args()
 cluster_file = args.Path
 latc = args.latitude
 lonc = args.longitude
-
+print(cluster_file, latc, lonc)
 #print and plot function for verbose:
 def vprint(output):
-    if args.verbose:
+    if args.verbose == True:
         print(output)
 
 #checking the central lat/long:
@@ -37,7 +40,12 @@ if lonc > 180:
 elif lonc >360:
     raise ValueError('central longitude is outside allowed range')
 
-ClusterData = pd.read_excel(cluster_file) #creating the dataframe for the cluster
+if cluster_file.endswith('.xls') or cluster_file.endswith('.xlsx'):
+    ClusterData = pd.read_excel(cluster_file) #creating the dataframe for the cluster
+elif cluster_file.endswith('.csv'):
+    ClusterData = pd.read_csv(cluster_file)
+else:
+    raise TypeError('Cluster Data must be in excel or csv format')
 #Finding HiRise ID of the Cluster
 input_list = cluster_file.split('.')
 to_split = input_list[0]
@@ -77,7 +85,7 @@ ClusterData_copy['y_coord'] = ClusterData_copy['y_coord'].apply(lambda a:(a - lo
 if crater_no > 5:
     centre , radii, rotation_matrix, rotation_angle = ct.BestFitEllipse(ClusterData_copy)
 
-if args.verbose:
+if args.verbose or args.save == True:
     #Starting the Plot:
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(111, aspect = 'equal')
@@ -96,8 +104,22 @@ if args.verbose:
         ax.add_patch(ellipse2)
         new_cluster['R1'] = radii[0] #adding to the dictionary
         new_cluster['R2'] = radii[1]
-    plt.show()
 
+    if args.verbose == True:
+        plt.show()
+    else:
+        plt.savefig('plotlog.png')
+
+if args.verbose == True:
+    file = open(log.txt)
+    file.write('largest Diameter:', d_max)
+    file.write('effective Diameter:', d_effective)
+    file.write('F value:', F)
+    file.write('N > D/2: ', N)
+    if crater_no >3:
+        file.write('Dispesion:', disp)
+    if crater_no >5:
+        file.write('Radii of best fit Ellipse:', radii[0], radii[1])
 #the output files:
 main_list = 'Testlist.xlsx'
 parameters_list = 'TestParameters.xlsx'

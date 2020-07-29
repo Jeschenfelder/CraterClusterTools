@@ -6,11 +6,11 @@ import math as mt
 from numpy import linalg
 from math import floor, log10
 class ClusterTools:
-    '''
+    """
     Tools used to format data of Crater Clusters and calculate the parameters needed.
     All functions assume a Pandas dataframe as input for the cluster data.
     It is set up to work on Mars, using its average radius in the dispersion function.
-    '''
+    """
     def __init__(self): pass
 
     def round_sig(self, x, sig=2): #rounding function defined
