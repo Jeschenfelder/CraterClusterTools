@@ -17,7 +17,11 @@ Matplotlib 3.2.2
 Jupyter
 
 ## Setup:
-To first set this program up, run the setup.py script first. Then change the file destinations 'main_list' and 'parameters_list' in ClusterParameters.py to the desired output locations.
+To install:
+```
+python setup.py install --user
+```
+Then change the file destinations 'main_list' and 'parameters_list' in ClusterParameters.py to the desired output locations.
 
 ## Inspiration
 The program is based on previous work by Ingrid Daubar and Eric Newland.
