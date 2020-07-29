@@ -21,7 +21,9 @@ class ClusterTools:
         '''
         Function to calculate the effective diameter of a cluster.
         d_effective = (sum(d_crater^3))^1/3
-        The function takes as input a Pandas dataframe and outputs the effective diameter rounded.
+        Input:
+        ClusterData: Dataframe containing the craters
+        diameter: name of the column in dataframe giving the diameter in metres
         '''
         df = ClusterData.copy() #work copy of the data to not alter the original file
         df['D_cubed'] = df[diameter].apply(lambda x: x**3)
@@ -33,7 +35,9 @@ class ClusterTools:
     def F_value(self, ClusterData, diameter = 'Diam_m'):
         '''
         This function will find the diameter of the largest crater in the cluster, the number of craters that are larger than half the largest and the fraction of how many those are.
-        The function takes as input a Pandas dataframe.
+        Input:
+        ClusterData: Dataframe containing all craters in clusters
+        diameter: name of the column in dataframe giving the diameter in metres
         '''
         #ClusterData is the pandas Database of all craters in the cluster
         #diameter is the name of the column giving the Diameter in metre
@@ -55,8 +59,12 @@ class ClusterTools:
         '''
         This function calculates the dispersion of a cluster from a pandas dataframe giving the x and y coordinates of .
         The dispersion is defined as the standard deviation of the distance between all possible crater pairs.
-        This method gives meaningul results for clusters with 3 or more craters.
-        It is using the radius of Mars to convert from lat/lon data to metres. To use for different planets, just change the Radius
+        This method gives meaningul results for clusters with more than 3 craters in a cluster.
+        It is using the radius of Mars to convert from lat/lon data to metres.
+        Input:
+        ClusterData: Dataframe containing all craters in clusters
+        x: column name giving the longitude
+        y: column name giving the latitude
         '''
         Rmars = 3390000 #radius of Mars in metres
         #x and y are the names of the column in ClusterData denoting the x and y coordinates respectively
@@ -79,6 +87,11 @@ class ClusterTools:
         This function will calculate the radii, centre point and rotation of the best fitting Ellipse around the cluster from a pandas dataframe.
         It is using a Bootstrap of 300 iterations to minimise the impact outliers have on the final Ellipse and the Kachiyan algorithm to find the minimum volume Ellipse for each sample.
         This method works for clusters larger than 5 craters.
+        Input:
+        ClusterData: Dataframe containing all craters in clusters
+        tolerance: tolerance for the Kachiyan algorithm
+        x: column name giving the longitude
+        y: column name giving the latitude
         '''
     #Output:radii, rotation and centre of ellipse
         df = ClusterData.copy() #creating a workable copy of the data

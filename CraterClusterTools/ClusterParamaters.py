@@ -14,6 +14,7 @@ The program takes as input the path to the cluster's data and the lat lon coordi
 The program assumes that the cluster's data is named after the HiRise ID of the image used and will use this as a label for the data.
 '''
 
+
 parser = argparse.ArgumentParser(prog = 'ClusterParameters', description='Calculate Cluster Parameters and save data to main list and parameter sheet')
 parser.add_argument('-v' , '--verbose', help = 'will print the outputs and plot the cluster')
 parser.add_argument('-s' , '--save', help = 'will save the outputs to log files')
@@ -120,8 +121,8 @@ if args.verbose == True:
     if crater_no >5:
         file.write('Radii of best fit Ellipse:', radii[0], radii[1])
 #the output files:
-main_list = 'C:/Users/jae4518/OneDrive - Imperial College London/HiRise_Images_Clusters/ClustersDataSheet/MainSheet.xlsx'
-parameters_list = 'C:/Users/jae4518/OneDrive - Imperial College London/HiRise_Images_Clusters/ClustersDataSheet/NewClustersParameters.xlsx'
+main_list = 'Testlist.xlsx'
+parameters_list = 'TestParameters.xlsx'
 
 #Adding the new Cluster to existing Main sheet and data to data sheet:
 df_new = ClusterData.copy() #create copy to format
@@ -133,11 +134,11 @@ df_new.set_index(['HiRiseID', 'crater_no'], inplace = True) #create the Multiind
 df_new.to_excel(HiRiseID + 'formatted.xlsx')
 df_main = pd.read_excel(main_list, index_col=[0, 1])
 main = pd.concat([df_main, df_new])
-main.to_excel('MainSheet.xlsx') #saving the new version
+main.to_excel(main_list) #saving the new version
 
 
 #reading in Paramaters sheet
 df_parameters = pd.read_excel(parameters_list)
 #adding the new values to the list:
 df_parameters = df_parameters.append(new_cluster, ignore_index = True)
-df_parameters.to_excel('C:/Users/jae4518/OneDrive - Imperial College London/HiRise_Images_Clusters/ClustersDataSheet/NewClustersParameters.xlsx') #saving the updated version
+df_parameters.to_excel(parameters_list) #saving the updated version
