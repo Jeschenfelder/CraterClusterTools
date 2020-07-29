@@ -21,15 +21,14 @@ parser.add_argument('Path',type = str, help = 'Excel Sheet of raw Cluster Data, 
 parser.add_argument('latitude', type= float, help = 'central latitude of image')
 parser.add_argument('longitude', type = float, help = 'central longitude of image')
 
-
 args = parser.parse_args()
 cluster_file = args.Path
 latc = args.latitude
 lonc = args.longitude
-
+print(cluster_file, latc, lonc)
 #print and plot function for verbose:
 def vprint(output):
-    if args.verbose:
+    if args.verbose == True:
         print(output)
 
 #checking the central lat/long:
@@ -85,7 +84,7 @@ ClusterData_copy['y_coord'] = ClusterData_copy['y_coord'].apply(lambda a:(a - lo
 if crater_no > 5:
     centre , radii, rotation_matrix, rotation_angle = ct.BestFitEllipse(ClusterData_copy)
 
-if args.verbose or args.save:
+if args.verbose or args.save == True:
     #Starting the Plot:
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(111, aspect = 'equal')
@@ -105,12 +104,12 @@ if args.verbose or args.save:
         new_cluster['R1'] = radii[0] #adding to the dictionary
         new_cluster['R2'] = radii[1]
 
-    if args.verbose:
+    if args.verbose == True:
         plt.show()
     else:
         plt.savefig('plotlog.png')
 
-if args.verbose:
+if args.verbose == True:
     file = open(log.txt)
     file.write('largest Diameter:', d_max)
     file.write('effective Diameter:', d_effective)
