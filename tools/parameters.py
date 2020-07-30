@@ -38,7 +38,7 @@ def getParameters():
         lonc = lonc -360
     elif lonc >360:
         raise ValueError('central longitude is outside allowed range')
-return cluster_file, latc, lonc, verb, save
+    return cluster_file, latc, lonc, verb, save
 
 def readClusterFile(cluster_file):
     """
@@ -60,7 +60,7 @@ def readClusterFile(cluster_file):
     to_split = input_list[0]
     input_list = to_split.split('/')
     HiRiseID = input_list[-1]
-return ClusterData, HiRiseID
+    return ClusterData, HiRiseID
 def measureCluster(ClusterData, HiRiseID, latc, lonc,verb = False, save = False):
     """
     This function will measure the relevant parameters and if the verbose or save option is turned on plot the cluster and its best fit ellipse.
@@ -174,18 +174,12 @@ def ClusterParameters():
     """
     # Get cluster parameters
     cluster_file, latc, lonc = getParameters()
-​
     # Read the cluster file from ArcGIS
     ClusterData, HiRiseID = readClusterFile(cluster_file)
-​
     # Measure the cluster attributes
     new_cluster = measureCluster(ClusterData, HiRiseID, latc, lonc)
-​
     # Store the cluster attributes to file
     writeClusterAttributes(HiRiseID, ClusterData, new_cluster)
-​
-
-
 # To run this as a script
 if __name__ == '__main__':
     ClusterParameters()
