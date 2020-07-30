@@ -5,14 +5,14 @@ import random
 import math as mt
 from numpy import linalg
 from math import floor, log10
-    """
-    Tools used to format data of Crater Clusters and calculate the parameters needed.
-    All functions assume a Pandas dataframe as input for the cluster data.
-    It is set up to work on Mars, using its average radius in the dispersion function.
-    """
+"""
+Tools used to format data of Crater Clusters and calculate the parameters needed.
+All functions assume a Pandas dataframe as input for the cluster data.
+It is set up to work on Mars, using its average radius in the dispersion function.
+"""
 
-    #Calculating effective diameter from a pandas database:
-    #Must loop over single entries if done for a Multiindex of several clusters
+#Calculating effective diameter from a pandas database:
+#Must loop over single entries if done for a Multiindex of several clusters
 def d_eff(ClusterData, diameter = 'Diam_m'):
     '''
     Function to calculate the effective diameter of a cluster.
