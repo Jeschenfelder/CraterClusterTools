@@ -169,7 +169,6 @@ def BestFitEllipse(ClusterData, tolerance=0.1, lat = 'x_coord', lon = 'y_coord')
     av_center = np.array([np.mean(centrex), np.mean(centrey)])
     av_radii = np.array([np.mean(Rminor), np.mean(Rmajor)])
     av_rotation = np.array([[av_rot1, av_rot2], [av_rot3, av_rot4]])
-    print(av_rotation)
     #converting the rotation matrix to angle:
     if av_rotation[1,0] > 0:
         alpha = mt.acos(av_rotation[0,0]) *(180/np.pi)

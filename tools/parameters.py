@@ -1,4 +1,4 @@
-import tools.functions as ct
+import functions as ct
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mp
@@ -13,13 +13,14 @@ It will also add the list of craters in a cluster to a main sheet of all measure
 The program takes as input the path to the cluster's data and the lat lon coordinates of the centre of the used image in degrees.
 The program assumes that the cluster's data is named after the HiRise ID of the image used and will use this as a label for the data.
 '''
-def vprint(output):
-    if args.verbose == True:
+
+def vprint(output, verb):
+    if verb == True:
         print(output)
 def getParameters():
     parser = argparse.ArgumentParser(prog = 'ClusterParameters', description='Calculate Cluster Parameters and save data to main list and parameter sheet')
-    parser.add_argument('-v' , '--verbose',action = store_true,help = 'will print the outputs and plot the cluster')
-    parser.add_argument('-s' , '--save', action = store_true, help = 'will save the outputs to log files')
+    parser.add_argument('-v' , '--verbose',action = 'store_true',help = 'will print the outputs and plot the cluster')
+    parser.add_argument('-s' , '--save', action = 'store_true', help = 'will save the outputs to log files')
     parser.add_argument('Path',type = str, help = 'Excel Sheet of raw Cluster Data, named after the HiRiseID of image')
     parser.add_argument('latitude', type= float, help = 'central latitude of image')
     parser.add_argument('longitude', type = float, help = 'central longitude of image')
@@ -84,12 +85,12 @@ def measureCluster(ClusterData, HiRiseID, latc, lonc,verb = False, save = False)
 
     #Calculating effective diameter:
     d_effective = ct.d_eff(ClusterData)
-    vprint('effective diameter: ', d_effective)
+    vprint('effective diameter: ' + d_effective.astype(str), verb)
     #Finding largest crater, number of craters larger than D/2 and F value:
     largest, N, F = ct.F_value(ClusterData)
-    vprint('largest crater: ', largest)
-    vprint('N > D/2: ', N)
-    vprint('F value: ', F)
+    vprint('largest crater: ' + largest.astype(str), verb)
+    vprint('N > D/2: ' + str(N), verb)
+    vprint('F value: '+ str(F), verb)
 
     #creating parameter dictionary:
     new_cluster = {'HiRise_ID': HiRiseID, 'Number_Craters': crater_no, 'd_eff': d_effective, 'd_max': largest,'N>D/2': N,
@@ -97,7 +98,7 @@ def measureCluster(ClusterData, HiRiseID, latc, lonc,verb = False, save = False)
     #Calculating dispersion:
     if crater_no >3:
         disp = ct.dispersion(ClusterData)
-        vprint('dispersion: ', disp)
+        vprint('dispersion: '+ disp.astype(str), verb)
         new_cluster['Dispersion'] = disp #adding to dicitonary
 
     #Converting from degrees to metres for best fit ellipse calculations and plotting:
@@ -136,19 +137,24 @@ def measureCluster(ClusterData, HiRiseID, latc, lonc,verb = False, save = False)
             plt.savefig('plotlog.png')
 
     if save == True:
-        file = open(log.txt)
-        file.write('largest Diameter:', d_max)
-        file.write('effective Diameter:', d_effective)
-        file.write('F value:', F)
-        file.write('N > D/2: ', N)
+        file = open('log.txt', 'w')
+        file.write(HiRiseID + '\n')
+        writtenlarge ='largest Diameter:'+ str(largest) +'\n'
+        file.write(writtenlarge)
+        writteneff = 'effective Diameter:' + str(d_effective)+'\n'
+        file.write(writteneff)
+        writtenF = 'F value:' + str(F)+'\n'
+        file.write(writtenF)
+        writtenN = 'N > D/2:' +str(N)+'\n'
+        file.write(writtenN)
         if crater_no >3:
-            file.write('Dispesion:', disp)
+            writtendisp = 'Dispersion(m):' +str(disp)+'\n'
+            file.write(writtendisp)
         if crater_no >5:
-            file.write('Radii of best fit Ellipse:', radii[0], radii[1])
-    #the output files:
-    main_list = 'Testlist.xlsx'
-    parameters_list = 'TestParameters.xlsx'
-
+            writtenR = 'Radii of best fit Ellipse:' +str(radii[0]) +' ' +str(radii[1])
+            file.write(writtenR)
+    return new_cluster
+def writeClusterAttributes(HiRiseID, ClusterData, new_cluster, main_list = 'Testlist.xlsx', parameters_list = 'TestParameters.xlsx'):
     #Adding the new Cluster to existing Main sheet and data to data sheet:
     df_new = ClusterData.copy() #create copy to format
     #creating Multiindex and formatting to important data only
@@ -163,7 +169,7 @@ def measureCluster(ClusterData, HiRiseID, latc, lonc,verb = False, save = False)
 
 
     #reading in Paramaters sheet
-    df_parameters = pd.read_excel(parameters_list)
+    df_parameters = pd.read_excel(parameters_list, index_col=0)
     #adding the new values to the list:
     df_parameters = df_parameters.append(new_cluster, ignore_index = True)
     df_parameters.to_excel(parameters_list) #saving the updated version
@@ -173,11 +179,11 @@ def ClusterParameters():
     Runs the functions from the parameters script.
     """
     # Get cluster parameters
-    cluster_file, latc, lonc = getParameters()
+    cluster_file, latc, lonc, verb, save = getParameters()
     # Read the cluster file from ArcGIS
     ClusterData, HiRiseID = readClusterFile(cluster_file)
     # Measure the cluster attributes
-    new_cluster = measureCluster(ClusterData, HiRiseID, latc, lonc)
+    new_cluster = measureCluster(ClusterData, HiRiseID, latc, lonc, verb, save)
     # Store the cluster attributes to file
     writeClusterAttributes(HiRiseID, ClusterData, new_cluster)
 # To run this as a script
