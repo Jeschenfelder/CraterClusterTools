@@ -60,6 +60,7 @@ def readClusterFile(cluster_file):
     input_list = cluster_file.split('.')
     to_split = input_list[0]
     input_list = to_split.split('/')
+    print(input_list)
     HiRiseID = input_list[-1]
     return ClusterData, HiRiseID
 def measureCluster(ClusterData, HiRiseID, latc, lonc,verb = False, save = False):
@@ -110,7 +111,8 @@ def measureCluster(ClusterData, HiRiseID, latc, lonc,verb = False, save = False)
     #Calclulating best Fit ellipse:
     if crater_no > 5:
         centre , radii, rotation_matrix, rotation_angle = ct.BestFitEllipse(ClusterData_copy)
-
+        new_cluster['R1'] = radii[0]
+        new_cluster['R2'] = radii[1]
     if verb or save == True:
         #Starting the Plot:
         fig = plt.figure(figsize=(8, 6))
@@ -182,6 +184,7 @@ def ClusterParameters():
     cluster_file, latc, lonc, verb, save = getParameters()
     # Read the cluster file from ArcGIS
     ClusterData, HiRiseID = readClusterFile(cluster_file)
+    print(HiRiseID)
     # Measure the cluster attributes
     new_cluster = measureCluster(ClusterData, HiRiseID, latc, lonc, verb, save)
     # Store the cluster attributes to file
