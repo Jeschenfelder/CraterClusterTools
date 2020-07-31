@@ -75,7 +75,7 @@ def dispersion(ClusterData, x = 'x_coord', y = 'y_coord'):
     coord_array = np.array(df[[x, y]]) #create array of xy coordinates for craters in cluster
     sep_list = []
     for n in range(0, len(coord_array)): #iterating over all craters for separation calculation
-        for m in range(1, len(coord_array)): #calculating seperation ((x2-x1)**2 + (y2 - y1)**2)**0.5 for all combinations
+        for m in range(n+1, len(coord_array)): #calculating seperation ((x2-x1)**2 + (y2 - y1)**2)**0.5 for all combinations
             dx= (coord_array[m,0] - coord_array[n,0]) *Rmars*(np.pi/180)*mt.sin(mt.radians(90 - ((coord_array[m,0]+ coord_array[n,0])/2))) #converting to metres based xy coordinates
             dy = (coord_array[m,1] - coord_array[n,1]) *Rmars*(np.pi/180)
             sep = (dx**2+ dy**2)**0.5
