@@ -98,7 +98,7 @@ def measureCluster(ClusterData, HiRiseID, latc, lonc,verb = False, save = False)
      'F_value': F, 'central_latitude': latc, 'central_longitude': lonc}
     #Calculating dispersion:
     if crater_no >3:
-        disp = ct.dispersion(ClusterData)
+        disp, sep_array = ct.dispersion(ClusterData)
         vprint('dispersion: '+ disp.astype(str), verb)
         new_cluster['Dispersion'] = disp #adding to dicitonary
 
