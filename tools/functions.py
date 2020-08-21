@@ -81,7 +81,8 @@ def dispersion(ClusterData, x = 'x_coord', y = 'y_coord'):
             sep = (dx**2+ dy**2)**0.5
             sep_list.append(sep) #adding all separations to list
     dispersion = np.std(sep_list) #calculating dispersion as standard deviation
-    return dispersion
+    sep_array = np.array(sep_list)
+    return dispersion, sep_array
 
 def BestFitEllipse(ClusterData, tolerance=0.1, lat = 'x_coord', lon = 'y_coord'):
     '''
