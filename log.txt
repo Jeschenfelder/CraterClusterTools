@@ -1,0 +1,7 @@
+ESP_013694_2060
+largest Diameter:4.35
+effective Diameter:8.705
+F value:0.38
+N > D/2:19
+Dispersion(m):34.3667635386791
+Radii of best fit Ellipse:15.59394213823802 57.54064903805573

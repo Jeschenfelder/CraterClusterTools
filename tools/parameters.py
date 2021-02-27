@@ -156,7 +156,7 @@ def measureCluster(ClusterData, HiRiseID, latc, lonc,verb = False, save = False)
             writtenR = 'Radii of best fit Ellipse:' +str(radii[0]) +' ' +str(radii[1])
             file.write(writtenR)
     return new_cluster
-def writeClusterAttributes(HiRiseID, ClusterData, new_cluster, main_list = 'Testlist.xlsx', parameters_list = 'TestParameters.xlsx'):
+def writeClusterAttributes(HiRiseID, ClusterData, new_cluster, main_list = 'DataTables/Testlist.xlsx', parameters_list = 'DataTables/TestParameters.xlsx'):
     #Adding the new Cluster to existing Main sheet and data to data sheet:
     df_new = ClusterData.copy() #create copy to format
     #creating Multiindex and formatting to important data only
@@ -164,7 +164,7 @@ def writeClusterAttributes(HiRiseID, ClusterData, new_cluster, main_list = 'Test
     df_new['HiRiseID'] = HiRiseID #adding HiRise ID to all craters
     df_new.set_index(['HiRiseID', 'crater_no'], inplace = True) #create the Multiindex
     #saving the Multiindex in the same file for further use:
-    df_new.to_excel(HiRiseID + 'formatted.xlsx')
+    df_new.to_excel('DataTables/' + HiRiseID + 'formatted.xlsx')
     df_main = pd.read_excel(main_list, index_col=[0, 1])
     main = pd.concat([df_main, df_new])
     main.to_excel(main_list) #saving the new version
