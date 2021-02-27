@@ -3,6 +3,8 @@
 ## Introduction
 This program is a set of tools to be used for calculating important characteristics of Crater Clusters on Mars. It was developed in a UROP research internship at Imperial College London in the Summer of 2020.
 
+As some data is still unpublished, parts of the code is commented out where that data is needed and graphs only show data published in Recently Formed Crater Clusters on Mars by Ingrid Daubar et al. 2019.
+
 ## Technologies
 Python 3
 
